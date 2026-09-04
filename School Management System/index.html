@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Management System</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Toast Notification Box -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- 1. LOGIN SCREEN -->
+  <div id="login-container" class="login-wrapper">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="logo-icon">🎓</div>
+        <h2>School Management System</h2>
+        <p>Software Engineering Practical Project</p>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" placeholder="Enter username" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login to System</button>
+      </form>
+
+      <div class="demo-credentials">
+        <p><strong>Demo Credentials:</strong></p>
+        <p>Username: <code>admin</code> | Password: <code>admin123</code></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. MAIN APPLICATION -->
+  <div id="app-container" class="app-wrapper hidden">
+    <!-- Sidebar / Navigation -->
+    <nav class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">🎓</span>
+        <span class="brand-text">SchoolMS</span>
+      </div>
+      <ul class="nav-links">
+        <li><button class="nav-btn active" data-tab="dashboard">📊 Dashboard</button></li>
+        <li><button class="nav-btn" data-tab="students">👨‍🎓 Students</button></li>
+        <li><button class="nav-btn" data-tab="teachers">👩‍🏫 Teachers</button></li>
+        <li><button class="nav-btn" data-tab="classes">🏫 Classes</button></li>
+        <li><button class="nav-btn" data-tab="notices">📢 Notices</button></li>
+      </ul>
+      <div class="sidebar-footer">
+        <button id="logout-btn" class="btn btn-logout">🚪 Logout</button>
+      </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Navbar -->
+      <header class="topbar">
+        <h1 id="page-title">Dashboard</h1>
+        <div class="user-badge">
+          <span>Logged in as: <strong>Admin</strong></span>
+        </div>
+      </header>
+
+      <div class="content-body">
+        
+        <!-- SECTION 1: DASHBOARD -->
+        <section id="tab-dashboard" class="tab-content active">
+          <div class="stats-grid">
+            <div class="stat-card" style="border-left-color: #3b82f6;">
+              <div class="stat-icon" style="background-color: #eff6ff; color: #3b82f6;">👨‍🎓</div>
+              <div class="stat-info">
+                <h3>Total Students</h3>
+                <p id="stat-students" class="stat-number">0</p>
+              </div>
+            </div>
+
+            <div class="stat-card" style="border-left-color: #10b981;">
+              <div class="stat-icon" style="background-color: #ecfdf5; color: #10b981;">👩‍🏫</div>
+              <div class="stat-info">
+                <h3>Total Teachers</h3>
+                <p id="stat-teachers" class="stat-number">0</p>
+              </div>
+            </div>
+
+            <div class="stat-card" style="border-left-color: #8b5cf6;">
+              <div class="stat-icon" style="background-color: #f5f3ff; color: #8b5cf6;">🏫</div>
+              <div class="stat-info">
+                <h3>Total Classes</h3>
+                <p id="stat-classes" class="stat-number">0</p>
+              </div>
+            </div>
+
+            <div class="stat-card" style="border-left-color: #f59e0b;">
+              <div class="stat-icon" style="background-color: #fffbeb; color: #f59e0b;">📢</div>
+              <div class="stat-info">
+                <h3>Total Notices</h3>
+                <p id="stat-notices" class="stat-number">0</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard Recent Notices -->
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Recent Announcements & Notices</h2>
+            </div>
+            <div id="dashboard-notices-list" class="recent-notices-list">
+              <!-- Loaded dynamically -->
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 2: STUDENTS -->
+        <section id="tab-students" class="tab-content">
+          <div class="section-toolbar">
+            <div class="search-box">
+              <input type="text" id="student-search-input" placeholder="Search by name, class, email, phone...">
+              <button id="student-search-btn" class="btn btn-secondary">Search</button>
+              <button id="student-reset-btn" class="btn btn-outline">Reset</button>
+            </div>
+            <button id="btn-add-student" class="btn btn-primary">+ Add Student</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Class</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="students-table-body">
+                <!-- Loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 3: TEACHERS -->
+        <section id="tab-teachers" class="tab-content">
+          <div class="section-toolbar">
+            <h2>Teacher Records</h2>
+            <button id="btn-add-teacher" class="btn btn-primary">+ Add Teacher</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Subject</th>
+                  <th>Email</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="teachers-table-body">
+                <!-- Loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 4: CLASSES -->
+        <section id="tab-classes" class="tab-content">
+          <div class="section-toolbar">
+            <h2>Class & Section Management</h2>
+            <button id="btn-add-class" class="btn btn-primary">+ Add Class</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Section</th>
+                  <th>Teacher</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="classes-table-body">
+                <!-- Loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 5: NOTICES -->
+        <section id="tab-notices" class="tab-content">
+          <div class="section-toolbar">
+            <h2>Notice Board</h2>
+            <button id="btn-add-notice" class="btn btn-primary">+ Post Notice</button>
+          </div>
+
+          <div id="notices-grid" class="notices-grid">
+            <!-- Loaded dynamically -->
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- Student Modal (Add/Edit) -->
+  <div id="student-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="student-modal-title">Add Student</h3>
+        <button class="modal-close" onclick="closeModal('student-modal')">&times;</button>
+      </div>
+      <form id="student-form">
+        <input type="hidden" id="student-id">
+        <div class="form-group">
+          <label for="student-name">Full Name</label>
+          <input type="text" id="student-name" placeholder="e.g. Alice Walker" required>
+        </div>
+        <div class="form-group">
+          <label for="student-class">Class</label>
+          <input type="text" id="student-class" placeholder="e.g. Grade 10" required>
+        </div>
+        <div class="form-group">
+          <label for="student-email">Email Address</label>
+          <input type="email" id="student-email" placeholder="e.g. alice@school.edu" required>
+        </div>
+        <div class="form-group">
+          <label for="student-phone">Phone Number</label>
+          <input type="tel" id="student-phone" placeholder="e.g. 9876543210" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('student-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Teacher Modal (Add/Edit) -->
+  <div id="teacher-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="teacher-modal-title">Add Teacher</h3>
+        <button class="modal-close" onclick="closeModal('teacher-modal')">&times;</button>
+      </div>
+      <form id="teacher-form">
+        <input type="hidden" id="teacher-id">
+        <div class="form-group">
+          <label for="teacher-name">Full Name</label>
+          <input type="text" id="teacher-name" placeholder="e.g. Dr. Robert Davis" required>
+        </div>
+        <div class="form-group">
+          <label for="teacher-subject">Subject</label>
+          <input type="text" id="teacher-subject" placeholder="e.g. Mathematics" required>
+        </div>
+        <div class="form-group">
+          <label for="teacher-email">Email Address</label>
+          <input type="email" id="teacher-email" placeholder="e.g. robert@school.edu" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('teacher-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Teacher</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Class Modal (Add/Edit) -->
+  <div id="class-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="class-modal-title">Add Class</h3>
+        <button class="modal-close" onclick="closeModal('class-modal')">&times;</button>
+      </div>
+      <form id="class-form">
+        <input type="hidden" id="class-id">
+        <div class="form-group">
+          <label for="class-name">Class Name</label>
+          <input type="text" id="class-name" placeholder="e.g. Grade 10" required>
+        </div>
+        <div class="form-group">
+          <label for="class-section">Section</label>
+          <input type="text" id="class-section" placeholder="e.g. A" required>
+        </div>
+        <div class="form-group">
+          <label for="class-teacher">Teacher</label>
+          <input type="text" id="class-teacher" placeholder="e.g. Dr. Robert Davis" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('class-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Class</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notice Modal (Add) -->
+  <div id="notice-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Post Notice</h3>
+        <button class="modal-close" onclick="closeModal('notice-modal')">&times;</button>
+      </div>
+      <form id="notice-form">
+        <div class="form-group">
+          <label for="notice-title">Notice Title</label>
+          <input type="text" id="notice-title" placeholder="e.g. Sports Day Announcement" required>
+        </div>
+        <div class="form-group">
+          <label for="notice-date">Date</label>
+          <input type="date" id="notice-date" required>
+        </div>
+        <div class="form-group">
+          <label for="notice-description">Description</label>
+          <textarea id="notice-description" rows="4" placeholder="Enter notice details..." required></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('notice-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Post Notice</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
